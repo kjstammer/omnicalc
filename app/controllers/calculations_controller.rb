@@ -10,14 +10,24 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    text_split = @text.split
 
-    @word_count = "Replace this string with your answer."
+    @word_count = text_split.count
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
+    
+    text_wo_spaces = @text.gsub(" ","")
+    text_wo_linefeed = text_wo_spaces.gsub("\n","")
+    text_wo_cr = text_wo_linefeed.gsub("\r","")
+    text_wo_tabs = text_wo_cr.gsub("\t","")
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = text_wo_tabs.length
 
-    @occurrences = "Replace this string with your answer."
+    text_downcase=@text.downcase
+    text_downcase_nopunctuation=text_downcase.gsub(/[^a-z ]/, "")
+    text_downcase_split=text_downcase_nopunctuation.split
+    @occurrences = text_downcase_split.count(@special_word)
+
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +48,12 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    n = @years*12
+    r = @apr/12/100
+    p = @principal
+    
+    @monthly_payment = (r*p*((1+r)**n))/((1+r)**n-1)
+    
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +75,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending-@starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +97,50 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @numbers.max-@numbers.min
 
-    @median = "Replace this string with your answer."
+    count_is_odd = @count.odd?
+    if count_is_odd == true
+      @median = @sorted_numbers[(@count-1)/2]
+    else
+      @median = (@sorted_numbers[@count/2]+@sorted_numbers[@count/2-1])/2
+    end
 
-    @sum = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum/@count
+    
+    i = 0
+    sum_of_squares=0
+    while i < @count
+      distance_mean = @sorted_numbers[i]-@mean
+      squared_distance = distance_mean**2
+      sum_of_squares = sum_of_squares + squared_distance
+      i += 1
+    end
 
-    @variance = "Replace this string with your answer."
+    @variance = sum_of_squares/@count
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation = Math.sqrt(@variance)
 
-    @mode = "Replace this string with your answer."
+    temp_mode=@sorted_numbers[0]
+    i=1
+    while i < @count
+      count_i=@sorted_numbers.count(@sorted_numbers[i])
+      if count_i>@sorted_numbers.count(temp_mode)
+        temp_mode=i
+      end
+        i+=1
+    end
+    @mode = temp_mode
 
     # ================================================================================
     # Your code goes above.
