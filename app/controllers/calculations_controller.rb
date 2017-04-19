@@ -136,7 +136,7 @@ class CalculationsController < ApplicationController
     while i < @count
       count_i=@sorted_numbers.count(@sorted_numbers[i])
       if count_i>@sorted_numbers.count(temp_mode)
-        temp_mode=i
+        temp_mode=@sorted_numbers[i]
       end
         i+=1
     end
